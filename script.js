@@ -108,10 +108,15 @@ async function agregarLibro(e) {
 // Abrir modal para editar
 async function abrirModalEditar(id) {
     try {
+        // Esta llamada ahora usará el nuevo endpoint GET /libros/<id>
         const response = await fetch(`${API_URL}/${id}`);
+        
         if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || 'Error al cargar libro');
+            // Manejar error específico
+            if(response.status === 404) {
+                throw new Error('Libro no encontrado');
+            }
+            throw new Error(`Error ${response.status}: ${response.statusText}`);
         }
         
         const libro = await response.json();
