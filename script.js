@@ -20,10 +20,16 @@ btnGuardarCambios.addEventListener('click', actualizarLibro);
 async function cargarLibros() {
     mostrarCargando(true);
     try {
+        console.log("Intentando cargar libros desde:", API_URL);
         const response = await fetch(API_URL);
-        if (!response.ok) throw new Error('Error al cargar libros');
+        
+        if (!response.ok) {
+            console.error("Respuesta no OK:", response.status, response.statusText);
+            throw new Error('Error al cargar libros');
+        }
         
         const libros = await response.json();
+        console.log("Libros recibidos:", libros);
         mostrarLibros(libros);
     } catch (error) {
         console.error('Error:', error);
@@ -49,7 +55,7 @@ function mostrarLibros(libros) {
         fila.innerHTML = `
             <td>${libro.titulo}</td>
             <td>${libro.autor}</td>
-            <td>${libro.ano_publicacion}</td>
+            <td>${libro.año_publicacion}</td>
             <td>${libro.genero}</td>
             <td>
                 <span class="badge ${libro.prestado ? 'bg-danger' : 'bg-success'}">
@@ -76,7 +82,7 @@ async function agregarLibro(e) {
     const nuevoLibro = {
         titulo: document.getElementById('titulo').value,
         autor: document.getElementById('autor').value,
-        ano_publicacion: parseInt(document.getElementById('año').value),
+        año_publicacion: parseInt(document.getElementById('año').value),
         genero: document.getElementById('genero').value,
         prestado: document.getElementById('estado').value === 'true'
     };
@@ -110,7 +116,7 @@ async function abrirModalEditar(id) {
         document.getElementById('editarId').value = libro.id;
         document.getElementById('editarTitulo').value = libro.titulo;
         document.getElementById('editarAutor').value = libro.autor;
-        document.getElementById('editarAño').value = libro.ano_publicacion;
+        document.getElementById('editarAño').value = libro.año_publicacion;
         document.getElementById('editarGenero').value = libro.genero;
         document.getElementById('editarEstado').value = libro.prestado.toString();
         
@@ -127,7 +133,7 @@ async function actualizarLibro() {
     const libroActualizado = {
         titulo: document.getElementById('editarTitulo').value,
         autor: document.getElementById('editarAutor').value,
-        ano_publicacion: document.getElementById('editarAño').value,
+        año_publicacion: document.getElementById('editarAño').value,
         genero: document.getElementById('editarGenero').value,
         prestado: document.getElementById('editarEstado').value === 'true'
     };
