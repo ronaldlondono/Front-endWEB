@@ -1,5 +1,5 @@
-// Configuración - ¡IMPORTANTE! Actualiza con tu URL de Render
-const API_URL = 'https://webservice-ayaj.onrender.com';
+const API_BASE = 'https://webservice-ayaj.onrender.com';
+const API_URL  = `${API_BASE}/libros`; 
 
 // Elementos DOM
 const libroForm = document.getElementById('libroForm');
@@ -49,7 +49,7 @@ function mostrarLibros(libros) {
         fila.innerHTML = `
             <td>${libro.titulo}</td>
             <td>${libro.autor}</td>
-            <td>${libro.año_publicacion}</td>
+            <td>${libro.ano_publicacion}</td>
             <td>${libro.genero}</td>
             <td>
                 <span class="badge ${libro.prestado ? 'bg-danger' : 'bg-success'}">
@@ -76,7 +76,7 @@ async function agregarLibro(e) {
     const nuevoLibro = {
         titulo: document.getElementById('titulo').value,
         autor: document.getElementById('autor').value,
-        año_publicacion: document.getElementById('año').value,
+        ano_publicacion: parseInt(document.getElementById('año').value),
         genero: document.getElementById('genero').value,
         prestado: document.getElementById('estado').value === 'true'
     };
@@ -110,7 +110,7 @@ async function abrirModalEditar(id) {
         document.getElementById('editarId').value = libro.id;
         document.getElementById('editarTitulo').value = libro.titulo;
         document.getElementById('editarAutor').value = libro.autor;
-        document.getElementById('editarAño').value = libro.año_publicacion;
+        document.getElementById('editarAño').value = libro.ano_publicacion;
         document.getElementById('editarGenero').value = libro.genero;
         document.getElementById('editarEstado').value = libro.prestado.toString();
         
@@ -127,7 +127,7 @@ async function actualizarLibro() {
     const libroActualizado = {
         titulo: document.getElementById('editarTitulo').value,
         autor: document.getElementById('editarAutor').value,
-        año_publicacion: document.getElementById('editarAño').value,
+        ano_publicacion: document.getElementById('editarAño').value,
         genero: document.getElementById('editarGenero').value,
         prestado: document.getElementById('editarEstado').value === 'true'
     };
