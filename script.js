@@ -1,5 +1,5 @@
 // Configuración - ¡IMPORTANTE! Actualiza con tu URL de Render
-const API_URL = 'https://webservice-ayaj.onrender.com/libros';
+const API_URL = 'https://webservice-ayaj.onrender.com';
 
 // Elementos DOM
 const libroForm = document.getElementById('libroForm');
