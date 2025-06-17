@@ -109,7 +109,10 @@ async function agregarLibro(e) {
 async function abrirModalEditar(id) {
     try {
         const response = await fetch(`${API_URL}/${id}`);
-        if (!response.ok) throw new Error('Error al cargar libro');
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Error al cargar libro');
+        }
         
         const libro = await response.json();
         
@@ -118,12 +121,12 @@ async function abrirModalEditar(id) {
         document.getElementById('editarAutor').value = libro.autor;
         document.getElementById('editarAño').value = libro.año_publicacion;
         document.getElementById('editarGenero').value = libro.genero;
-        document.getElementById('editarEstado').value = libro.prestado.toString();
+        document.getElementById('editarEstado').value = libro.prestado ? 'true' : 'false';
         
         editarModal.show();
     } catch (error) {
         console.error('Error:', error);
-        mostrarError('Error al cargar los datos del libro');
+        mostrarError(`Error al cargar libro: ${error.message}`);
     }
 }
 
@@ -133,7 +136,7 @@ async function actualizarLibro() {
     const libroActualizado = {
         titulo: document.getElementById('editarTitulo').value,
         autor: document.getElementById('editarAutor').value,
-        año_publicacion: document.getElementById('editarAño').value,
+        año_publicacion: parseInt(document.getElementById('editarAño').value), // Convertir a número
         genero: document.getElementById('editarGenero').value,
         prestado: document.getElementById('editarEstado').value === 'true'
     };
@@ -145,14 +148,17 @@ async function actualizarLibro() {
             body: JSON.stringify(libroActualizado)
         });
         
-        if (!response.ok) throw new Error('Error al actualizar libro');
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Error al actualizar libro');
+        }
         
         editarModal.hide();
         cargarLibros();
         mostrarExito('Libro actualizado correctamente');
     } catch (error) {
         console.error('Error:', error);
-        mostrarError('Error al actualizar el libro');
+        mostrarError(`Error al actualizar libro: ${error.message}`);
     }
 }
 
